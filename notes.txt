@@ -1,0 +1,2 @@
+I should look to see if I can find a program that will print a graphical representation of a HP model.
+I should see what kind of advance data structure Ruby supports (i.e. Hash Tables) If they don't have a constant access DS then I need to either create one myself or find one online.
