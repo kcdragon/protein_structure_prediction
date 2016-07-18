@@ -12,6 +12,23 @@ AMINOACIDS = ["a","r","n","d","c","e","q","g","h","i","l","k","m","f","p","s","t
 HYDROPHOBIC = ["a","c","g","i","l","m","f","p","w","v"]
 HYDROPHOLIC = ["r","n","d","e","q","h","k","s","t","y"]
 
+if ARGV.length == 0
+	$stderr.puts 'Invalid arguments.'
+	$stderr.puts 'Usage: #{$0} [options...] sequence'
+	$stderr.puts
+	$stderr.puts 'where options include:'
+  $stderr.puts '  --gatype, -G              the type of ga to use(0:standard, 1:steady-state)'
+  $stderr.puts '  --steadystatechange, -r   if steady chosen, this is the percent of population that will be changed each generation'
+  $stderr.puts '  --maxgen, -g              the maximum number of generations to run for'
+	$stderr.puts '  --mutationrate, -m        the mutation rate'
+	$stderr.puts '  --crossoverrate, -c       the crossover rate'
+  $stderr.puts '  --inversionrate, -i       the inversion rate'
+  $stderr.puts '  --population, -p          the population size'
+  $stderr.puts '  --crossovertype, -t       the type of crossover (1:one point crossover, 2:two point crossover)'
+	$stderr.puts '  --output, -o file         send all results to output file'
+	exit(1)
+end
+
 opts = GetoptLong.new(
   [ '--gatype','-G', GetoptLong::REQUIRED_ARGUMENT],
   [ '--steadystatechange','-r', GetoptLong::REQUIRED_ARGUMENT],
@@ -60,30 +77,13 @@ opts.each do |opt, arg|
   end
 end
 
-if ARGV.length == 0
-	$stderr.puts 'Invalid arguments.'
-	$stderr.puts 'Usage: #{$0} [options...] sequence'
-	$stderr.puts
-	$stderr.puts 'where options include:'
-  $stderr.puts '  --gatype, -G              the type of ga to use(0:standard, 1:steady-state)'
-  $stderr.puts '  --steadystatechange, -r   if steady chosen, this is the percent of population that will be changed each generation'
-  $stderr.puts '  --maxgen, -g              the maximum number of generations to run for'
-	$stderr.puts '  --mutationrate, -m        the mutation rate'
-	$stderr.puts '  --crossoverrate, -c       the crossover rate'
-  $stderr.puts '  --inversionrate, -i       the inversion rate'
-  $stderr.puts '  --population, -p          the population size'
-  $stderr.puts '  --crossovertype, -t       the type of crossover (1:one point crossover, 2:two point crossover)'
-	$stderr.puts '  --output, -o file         send all results to output file'
-	exit(1)
-end
-
 #hp_seq = ARGV[0].downcase
 #aa_seq.each_char { |c| raise "Error: #{c} is not a valid amino acid." if AMINOACIDS.index(c.downcase)==nil }
 #hp_seq = Convert.aatohp(aa_seq)
 
-#hp_seq = "hphhpph"
+hp_seq = "hphhpph"
 #hp_seq = "hphpphhphpphphhpphph" # 9/9, 48 gens,standard, 1 point cross, .6 cross, .1 mut
-hp_seq = "hhpphpphpphpphpphpphpphh" # 9/9, 467 gens,standard, 1 point cross, .6 cross, .1 mut
+#hp_seq = "hhpphpphpphpphpphpphpphh" # 9/9, 467 gens,standard, 1 point cross, .6 cross, .1 mut
 #hp_seq = "pphpphhpppphhpppphhpppphh" # 7/8, 1000 gens,steady state(.4 change), 1 point cross, .75 cross, .1 mut
                                      # 7/8, 1000 gens,standard, 1 point cross, .6 cross, .1 mut
 #hp_seq = "ppphhpphhppppphhhhhhhpphhpppphhpphpp" # 13/14, 1000 gens, steady state(.4 change), 1 point cross, .75 cross, .1 mut
@@ -118,6 +118,6 @@ endt = Time.now
 puts "#{bestcanidate},#{bestfitness},#{endt-start}"
 #puts "Time: #{endt-start}"
 
-#display = Display.new(hp_seq,bestcanidate)
+display = Display.new(hp_seq,bestcanidate)
 #display = Display.new(hp_seq,"ruruluulluuulddddrrddlulddldluurulluulururdddru")
-#display.display
+display.display
