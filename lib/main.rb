@@ -12,9 +12,9 @@ AMINOACIDS = ["a","r","n","d","c","e","q","g","h","i","l","k","m","f","p","s","t
 HYDROPHOBIC = ["a","c","g","i","l","m","f","p","w","v"]
 HYDROPHOLIC = ["r","n","d","e","q","h","k","s","t","y"]
 
-if ARGV.length == 0
+def help!
   $stderr.puts 'Invalid arguments.'
-  $stderr.puts 'Usage: #{$0} [options...] sequence'
+  $stderr.puts "Usage: #{$0} [options...] sequence"
   $stderr.puts
   $stderr.puts 'where options include:'
   $stderr.puts '  --gatype, -G              the type of ga to use(0:standard, 1:steady-state)'
@@ -23,10 +23,14 @@ if ARGV.length == 0
   $stderr.puts '  --mutationrate, -m        the mutation rate'
   $stderr.puts '  --crossoverrate, -c       the crossover rate'
   $stderr.puts '  --inversionrate, -i       the inversion rate'
-  $stderr.puts '  --population, -p          the population size'
+  $stderr.puts '  --populationsize, -p      the population size'
   $stderr.puts '  --crossovertype, -t       the type of crossover (1:one point crossover, 2:two point crossover)'
-  $stderr.puts '  --output, -o file         send all results to output file'
+  $stderr.puts '  --help, -h                print this message'
   exit(1)
+end
+
+if ARGV.length == 0
+  help!
 end
 
 opts = GetoptLong.new(
@@ -37,7 +41,8 @@ opts = GetoptLong.new(
   [ '--crossoverrate','-c', GetoptLong::REQUIRED_ARGUMENT],
   [ '--inversionrate','-i', GetoptLong::REQUIRED_ARGUMENT],
   [ '--populationsize','-p', GetoptLong::REQUIRED_ARGUMENT],
-  [ '--crossovertype','-t', GetoptLong::REQUIRED_ARGUMENT]
+  [ '--crossovertype','-t', GetoptLong::REQUIRED_ARGUMENT],
+  [ '--help','-h', GetoptLong::NO_ARGUMENT]
 )
 
 gatype = 0
@@ -56,8 +61,8 @@ opts.each do |opt, arg|
     gatype = arg.to_i
   when 'steadystatechange'
     sschange = arg.to_f
-	when '--maxgen'
-    raise "Invalid number of Maximum Generations: #{arg} is not a valid input" if arg.to_f < 0# || arg.is_a?(Fixnum)
+  when '--maxgen'
+    raise "Invalid number of Maximum Generations: #{arg} is not a valid input" if arg.to_f <= 0
     maxgen = arg.to_i
   when '--mutationrate'
     raise "Invalid Mutation Rate: #{arg} is not a valid input" if arg.to_f < 0 || arg.to_f > 1
@@ -69,38 +74,19 @@ opts.each do |opt, arg|
     raise "Invalid Inversion Rate: #{arg} is not a valid input" if arg.to_f < 0 || arg.to_f > 1
     inversion = arg.to_f
   when '--populationsize'
-    raise "Invalid size of population: #{arg} is not a valid input" if arg.to_i < 0# || arg.is_a?(Fixnum)
+    raise "Invalid size of population: #{arg} is not a valid input" if arg.to_i <= 0
     population = arg.to_i
   when '--crossovertype'
     raise "Invalid type of crossover: #{arg} is not a valid input" if arg.to_i != 1 && arg.to_i != 2
     ctype = arg.to_i
+  when '--help'
+    help!
   end
 end
 
-#hp_seq = ARGV[0].downcase
-#aa_seq.each_char { |c| raise "Error: #{c} is not a valid amino acid." if AMINOACIDS.index(c.downcase)==nil }
-#hp_seq = Convert.aatohp(aa_seq)
-
-hp_seq = "hphhpph"
-#hp_seq = "hphpphhphpphphhpphph" # 9/9, 48 gens,standard, 1 point cross, .6 cross, .1 mut
-#hp_seq = "hhpphpphpphpphpphpphpphh" # 9/9, 467 gens,standard, 1 point cross, .6 cross, .1 mut
-#hp_seq = "pphpphhpppphhpppphhpppphh" # 7/8, 1000 gens,steady state(.4 change), 1 point cross, .75 cross, .1 mut
-                                     # 7/8, 1000 gens,standard, 1 point cross, .6 cross, .1 mut
-#hp_seq = "ppphhpphhppppphhhhhhhpphhpppphhpphpp" # 13/14, 1000 gens, steady state(.4 change), 1 point cross, .75 cross, .1 mut
-                                                # 13/14, 1000 gens,standard, 1 point cross, .6 cross, .1 mut, 200 pop
-#hp_seq = "pphpphhpphhppppphhhhhhhhhhpppppphhpphhpphpphhhhh" # 22
-
-#puts "Amino Acid Sequence: #{aa_seq.upcase}"
-#puts "HP Model: #{hp_seq.upcase}"
+hp_seq = ARGV[0].downcase
 
 pop = Pop.new(hp_seq,population).generate
-#puts pop
-
-#pop.each do |c|
-#  puts "\nDisplay #{fitness(c,hp_seq)}"
-#  display = Display.new(hp_seq, c)
-#  display.display
-#end
 
 start = Time.now
 if gatype==0
@@ -112,12 +98,8 @@ else
 end
 endt = Time.now
 
-#puts "Variables: gatype #{gatype}, crossoverrate #{crossover}, mutationrate #{mutation}, crossovertype #{ctype}, pop size #{population}"
-#puts "#{gatype},#{crossover},#{mutation},#{ctype},#{population}"
-#puts "Solution #{bestcanidate} #{bestfitness}"
-puts "#{bestcanidate},#{bestfitness},#{endt-start}"
-#puts "Time: #{endt-start}"
+puts "Solution: #{bestcanidate} #{bestfitness}"
+puts "Time: #{endt-start}"
 
 display = Display.new(hp_seq,bestcanidate)
-#display = Display.new(hp_seq,"ruruluulluuulddddrrddlulddldluurulluulururdddru")
 display.display
