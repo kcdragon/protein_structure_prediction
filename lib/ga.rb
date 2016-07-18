@@ -162,7 +162,7 @@ private
         prev = chrom
         chrom[i] = (["u","d","l","r"]-[chrom[i]])[rand(3)]
         chrom = reconform(chrom,i)
-        
+
 #        collisions = find_collisions(chrom)
 #        collisions.each do |col|
 #          chrom = reconform(chrom,col)
@@ -402,7 +402,7 @@ class SteadyStateGA < GA
 
     while currgen <= @maxgen# && bestfitness < (@term+1)
       #puts "Generation: #{currgen}"
-      
+
       # generate new pop
       newpop = []
       i=0
@@ -484,7 +484,7 @@ class StandardGA < GA
           bestcanidate = @pop[j]
         end
       end
-      
+
       #puts "best canidate: #{bestcanidate}\tbest fitness: #{bestfitness}"
       #puts "percent able to reconform: #{reconformpercent}%"
       #puts "number of unique population: #{unique}"

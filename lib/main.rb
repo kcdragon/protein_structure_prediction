@@ -13,20 +13,20 @@ HYDROPHOBIC = ["a","c","g","i","l","m","f","p","w","v"]
 HYDROPHOLIC = ["r","n","d","e","q","h","k","s","t","y"]
 
 if ARGV.length == 0
-	$stderr.puts 'Invalid arguments.'
-	$stderr.puts 'Usage: #{$0} [options...] sequence'
-	$stderr.puts
-	$stderr.puts 'where options include:'
+  $stderr.puts 'Invalid arguments.'
+  $stderr.puts 'Usage: #{$0} [options...] sequence'
+  $stderr.puts
+  $stderr.puts 'where options include:'
   $stderr.puts '  --gatype, -G              the type of ga to use(0:standard, 1:steady-state)'
   $stderr.puts '  --steadystatechange, -r   if steady chosen, this is the percent of population that will be changed each generation'
   $stderr.puts '  --maxgen, -g              the maximum number of generations to run for'
-	$stderr.puts '  --mutationrate, -m        the mutation rate'
-	$stderr.puts '  --crossoverrate, -c       the crossover rate'
+  $stderr.puts '  --mutationrate, -m        the mutation rate'
+  $stderr.puts '  --crossoverrate, -c       the crossover rate'
   $stderr.puts '  --inversionrate, -i       the inversion rate'
   $stderr.puts '  --population, -p          the population size'
   $stderr.puts '  --crossovertype, -t       the type of crossover (1:one point crossover, 2:two point crossover)'
-	$stderr.puts '  --output, -o file         send all results to output file'
-	exit(1)
+  $stderr.puts '  --output, -o file         send all results to output file'
+  exit(1)
 end
 
 opts = GetoptLong.new(
@@ -50,7 +50,7 @@ ctype = 1
 population = 200
 
 opts.each do |opt, arg|
-	case opt
+  case opt
   when '--gatype'
     raise "Invalid GA type: #{arg} is not a valid input" if arg.to_i != 0 && arg.to_i != 1
     gatype = arg.to_i
