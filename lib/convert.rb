@@ -4,6 +4,8 @@
 # todo nothing, maybe make this a Utility class
 
 class Convert
+  HYDROPHOBIC = ["a","c","g","i","l","m","f","p","w","v"]
+
   # convert aminoacid sequence to hp model
   # returns a string
   # takes the string of amino acids, converts each of them to their equivalent hp value and returns that as a string

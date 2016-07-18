@@ -8,10 +8,6 @@ require 'pop'
 require 'display'
 require 'getoptlong'
 
-AMINOACIDS = ["a","r","n","d","c","e","q","g","h","i","l","k","m","f","p","s","t","w","y","v"]
-HYDROPHOBIC = ["a","c","g","i","l","m","f","p","w","v"]
-HYDROPHOLIC = ["r","n","d","e","q","h","k","s","t","y"]
-
 def help!
   $stderr.puts 'Invalid arguments.'
   $stderr.puts "Usage: #{$0} [options...] sequence"
