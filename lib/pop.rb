@@ -4,48 +4,45 @@
 # another possible way to generate population - pick direction randomly, then call reconform to put back in valid order
 
 class Pop
-  DIRECTIONS = ["u","d","l","r"]
+  DIRECTIONS = ['u', 'd', 'l', 'r']
 
-  def initialize(hp,size)
-    @hp,@size = hp,size
+  def initialize(hp, size)
+    @hp, @size = hp, size
   end
 
   def generate
     @size.times.map { create }
   end
 
-private
+  private
 
   # returns a string
   def create
-    return backtrack([""],[[0,0]])
+    backtrack([''], [[0, 0]])
   end
 
   # standard backtracking algorithm
   # returns a string
-  def backtrack(chromosomelist,coordinates)
-    chrom = chromosomelist.last
-    coord = coordinates
-    
-    return nil if chrom.length == @hp.size-1
+  def backtrack(chromosome_list, coordinates)
+    chromosome = chromosome_list.last
 
-    possible = randomize_directions(possible_directions(coord))
-    return "failed" if possible == nil
+    return '' if chromosome.length == (@hp.size - 1)
 
-    possible.each_char do |dir|
-      newChrom = chrom+dir
-      newChromList = chromosomelist.push(newChrom)
-      newCoord = coord + [next_coordinate(coord.last, dir)]
-      path = backtrack(newChromList,newCoord)
-      if path != "failed"
-        if path == nil
-          return dir
-        else
-          return path+dir
-        end
+    possible = randomize_directions(possible_directions(coordinates))
+
+    return if possible.empty?
+
+    possible.each do |direction|
+      new_chrom = chromosome + direction
+      new_chrom_list = chromosome_list + [new_chrom]
+      new_coordinates = coordinates + [next_coordinate(coordinates.last, direction)]
+      path = backtrack(new_chrom_list, new_coordinates)
+      if path
+        return path + direction
       end
     end
-    return "failed"
+
+    nil
   end
 
   # returns a string of valid directions to move in
@@ -53,13 +50,13 @@ private
     previous_coordinate = coordinates.last
     DIRECTIONS.reject.with_index do |direction, index|
       coordinates.include?(next_coordinate(previous_coordinate, direction))
-    end.join
+    end
   end
 
   # return directions in a random order
   # this prevents always trying the directions in the same order (i.e. u d l r)
   def randomize_directions(directions)
-    directions.split('').shuffle.join
+    directions.shuffle
   end
 
   # gets the new corrdinates given the direction and previous coordinates
