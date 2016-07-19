@@ -62,14 +62,7 @@ private
   # return directions in a random order
   # this prevents always trying the directions in the same order (i.e. u d l r)
   def randomize_directions(directions)
-    dir = directions
-    dir2 = ""
-    while dir != ""
-      r = rand(dir.length)
-      dir2 << dir[r]
-      dir[r]=""
-    end
-    return dir2
+    directions.split('').shuffle.join
   end
 
   # gets the new corrdinates given the direction and previous coordinates
