@@ -35,7 +35,7 @@ private
     possible.each_char do |dir|
       newChrom = chrom+dir
       newChromList = chromosomelist.push(newChrom)
-      newCoord = coord+directiontocoordinate(dir,coord.last)
+      newCoord = coord + [next_coordinate(coord.last, dir)]
       path = backtrack(newChromList,newCoord)
       if path != "failed"
         if path == nil
@@ -52,7 +52,7 @@ private
   def possible_directions(coordinates)
     previous_coordinate = coordinates.last
     DIRECTIONS.reject.with_index do |direction, index|
-      coordinates.include?(directiontocoordinate(direction, previous_coordinate).first)
+      coordinates.include?(next_coordinate(previous_coordinate, direction))
     end.join
   end
 
@@ -64,19 +64,18 @@ private
 
   # gets the new corrdinates given the direction and previous coordinates
   # returns an array of an array of two ints
-  def directiontocoordinate(direction,previous)
+  def next_coordinate(previous, direction)
     case direction
-    when "u"
-      new_dir = [[previous[0],previous[1]+1]]
-    when "d"
-      new_dir = [[previous[0],previous[1]-1]]
-    when "l"
-      new_dir = [[previous[0]-1,previous[1]]]
-    when "r"
-      new_dir = [[previous[0]+1,previous[1]]]
+    when 'u'
+      [previous[0], previous[1] + 1]
+    when 'd'
+      [previous[0], previous[1] - 1]
+    when 'l'
+      [previous[0] - 1, previous[1]]
+    when 'r'
+      [previous[0] + 1, previous[1]]
     else
-      raise "Incorrect character in direction sequence"
+      raise 'Incorrect character in direction sequence'
     end
-    return new_dir
   end
 end
