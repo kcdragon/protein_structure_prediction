@@ -50,13 +50,10 @@ private
 
   # returns a string of valid directions to move in
   def possible_directions(coordinates)
-    prev = coordinates.last
-    poss = [ [prev[0],prev[1]+1] , [prev[0],prev[1]-1] , [prev[0]-1,prev[1]] , [prev[0]+1,prev[1]] ] # the list of possible moves
-    valid = ""
-    for i in (0..3)
-      valid << DIRECTIONS[i] if !coordinates.include?(poss[i])
-    end
-    return valid
+    previous_coordinate = coordinates.last
+    DIRECTIONS.reject.with_index do |direction, index|
+      coordinates.include?(directiontocoordinate(direction, previous_coordinate).first)
+    end.join
   end
 
   # return directions in a random order
