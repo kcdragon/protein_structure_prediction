@@ -82,20 +82,20 @@ end
 
 hp_seq = ARGV[0].downcase
 
-pop = Pop.new(hp_seq,population).generate
+pop = Pop.new(hp_seq, population).generate
 
 start = Time.now
-if gatype==0
-  standard = StandardGA.new(hp_seq,pop,maxgen,mutation,crossover,inversion,ctype)
-  bestcanidate,bestfitness = standard.run
+if gatype == 0
+  standard = StandardGA.new(hp_seq, pop, maxgen, mutation, crossover, inversion, ctype)
+  bestcanidate, bestfitness = standard.run
 else
-  steadystate = SteadyStateGA.new(hp_seq,pop,maxgen,mutation,crossover,inversion,ctype,sschange)
-  bestcanidate,bestfitness = steadystate.run
+  steadystate = SteadyStateGA.new(hp_seq, pop, maxgen, mutation, crossover, inversion, ctype, sschange)
+  bestcanidate, bestfitness = steadystate.run
 end
 endt = Time.now
 
 puts "Solution: #{bestcanidate} #{bestfitness}"
 puts "Time: #{endt-start}"
 
-display = Display.new(hp_seq,bestcanidate)
+display = Display.new(hp_seq, bestcanidate)
 display.display
