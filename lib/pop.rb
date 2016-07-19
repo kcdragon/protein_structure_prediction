@@ -11,9 +11,7 @@ class Pop
   end
 
   def generate
-    pop = []
-    @size.times { pop << create }
-    return pop
+    @size.times.map { create }
   end
 
 private
