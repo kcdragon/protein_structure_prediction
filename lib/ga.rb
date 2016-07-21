@@ -445,8 +445,8 @@ class SteadyStateGA < GA
 end
 
 class StandardGA < GA
-  def initialize(hp,pop,maxgen,mutation,crossover,inversion,ctype)
-    super(hp,pop,maxgen,mutation,crossover,inversion,ctype)
+  def initialize(hp, pop, maxgen, mutation, crossover, inversion, ctype)
+    super
   end
 
   def run
@@ -455,43 +455,24 @@ class StandardGA < GA
     bestfitness = 0
     bestcanidate = ""
 
-    for i in (0...@pop.size)
-      fitness = fitness(@pop[i])
-      fitnesslist[i] = fitness
-      if fitness > bestfitness
-        bestfitness = fitness
-        bestcanidate = @pop[i]
-      end
-    end
-
-    while currgen <= @maxgen# && bestfitness < (@term)
-      #puts "Generation: #{currgen}"
-
-      newpop = []
-      while newpop.size != @pop.size  # populate new population
-        chrom = selection(fitnesslist)
-        newpop << chrom
-      end
-      @pop = newpop
-
-      ft=0
-      for j in (0...@pop.size)
-        fitness = fitness(@pop[j])
-        ft+=fitness
-        fitnesslist[j] = fitness
+    begin
+      fitnesslist = @pop.map do |candidate|
+        fitness = fitness(candidate)
         if fitness > bestfitness
           bestfitness = fitness
-          bestcanidate = @pop[j]
+          bestcanidate = candidate
         end
+        fitness
       end
 
-      #puts "best canidate: #{bestcanidate}\tbest fitness: #{bestfitness}"
-      #puts "percent able to reconform: #{reconformpercent}%"
-      #puts "number of unique population: #{unique}"
-      #puts "average fitness: #{ft.to_f/@pop.size}"
-      currgen+=1
-    end
-    return bestcanidate,bestfitness
+      @pop = @pop.map do
+        selection(fitnesslist)
+      end
+
+      currgen += 1
+    end while currgen <= @maxgen && bestfitness < @term
+
+    return bestcanidate, bestfitness
   end
 
 end
