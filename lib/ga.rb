@@ -450,29 +450,29 @@ class StandardGA < GA
   end
 
   def run
-    currgen = 1
-    fitnesslist = []
-    bestfitness = 0
-    bestcanidate = ""
+    generation_count = 1
+    fitness_list = []
+    best_fitness = 0
+    best_canidate = ''
 
     begin
-      fitnesslist = @pop.map do |candidate|
+      fitness_list = @pop.map do |candidate|
         fitness = fitness(candidate)
-        if fitness > bestfitness
-          bestfitness = fitness
-          bestcanidate = candidate
+        if fitness > best_fitness
+          best_fitness = fitness
+          best_canidate = candidate
         end
         fitness
       end
 
       @pop = @pop.map do
-        selection(fitnesslist)
+        selection(fitness_list)
       end
 
-      currgen += 1
-    end while currgen <= @maxgen && bestfitness < @term
+      generation_count += 1
+    end while generation_count <= @maxgen && best_fitness < @term
 
-    return bestcanidate, bestfitness
+    return best_canidate, best_fitness
   end
 
 end
