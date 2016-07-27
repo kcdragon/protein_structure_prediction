@@ -315,7 +315,7 @@ end
   # @return coordinates for string
   # running time: BigTheta(n), n=chromosome.length
   def newvirtual_coord(chromosome)
-    coord = HashTable.new(8)
+    coord = HashTable.new
     coord.add([0,0])
     chromosome.each_char { |c| coord.add(next_location(coord.last,c)) }
     return coord
@@ -325,7 +325,7 @@ end
   # @return coordinates for string
   # running time: BigTheta(n), n=chromosome.length
   def newvirtual_coord_h(chromosome)
-    coord = HashTable.new(8)
+    coord = HashTable.new
     last = [0,0]
     coord.add(last)
     remove = (@hp[0]=="p")?[[0,0]]:[]
