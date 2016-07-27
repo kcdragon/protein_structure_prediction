@@ -4,7 +4,7 @@
 # todo
 # => implement elitism
 
-require 'hashtable'
+require 'set'
 
 class GA
 
@@ -58,7 +58,7 @@ protected
       fitness=0
       hash = newvirtual_coord_h(chromosome)
       hash.each do |c|
-        hash.each_neighbor(c) do |n|
+        hash.each do |n|
           if next_to?(c,n)
             fitness+=1
           end
@@ -229,15 +229,15 @@ private
   # @param chromosome string
   # @return false if there is a collision, true otherwise
   def valid?(chromosome)
-    coord = HashTable.new
+    coord = Set.new
     last = [0,0]
-    coord.add(last)
+    coord << last
     chromosome.each_char do |c|
       new = next_location(last,c)
       if coord.include?(new)
         return false
       else
-        coord.add(new)
+        coord << new
         last = new
       end
     end
@@ -247,9 +247,9 @@ private
   # @param chromosome string
   # @return list of collision indeces
   def find_collisions(chromosome)
-    coord = HashTable.new
+    coord = Set.new
     last = [0,0]
-    coord.add(last)
+    coord << last
     collisions = []
     i=0
     chromosome.each_char do |c|
@@ -257,7 +257,7 @@ private
       if coord.include?(new)
         collisions << i
       end
-      coord.add(new)
+      coord << new
       last = new
       i+=1
     end
@@ -315,30 +315,32 @@ end
   # @return coordinates for string
   # running time: BigTheta(n), n=chromosome.length
   def newvirtual_coord(chromosome)
-    coord = HashTable.new
-    coord.add([0,0])
-    chromosome.each_char { |c| coord.add(next_location(coord.last,c)) }
-    return coord
+    coord = Set.new
+    coord << [0,0]
+    chromosome.each_char do |c|
+      coord << next_location(coord.last,c)
+    end
+    coord
   end
 
   # @param chromosome string
   # @return coordinates for string
   # running time: BigTheta(n), n=chromosome.length
   def newvirtual_coord_h(chromosome)
-    coord = HashTable.new
+    coord = Set.new
     last = [0,0]
-    coord.add(last)
+    coord << last
     remove = (@hp[0]=="p")?[[0,0]]:[]
     i=1
     chromosome.each_char do |c|
       n = next_location(last,c)
       last = n
-      coord.add(n)
+      coord << n
       remove << n if @hp[i]=="p"
       i+=1
     end
-    remove.each { |c| coord.remove(c) }
-    return coord
+    remove.each { |c| coord.delete(c) }
+    coord
   end
 
   # @param prev previous location, array of two integers
@@ -362,7 +364,6 @@ end
 
   # performance metric
   def unique
-    require 'set'
     a = Set.new
     @pop.each do |c|
       if ! a.include?(c)
