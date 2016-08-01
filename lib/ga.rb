@@ -228,20 +228,17 @@ private
 
   # @param chromosome string
   # @return false if there is a collision, true otherwise
-  def valid?(chromosome)
-    coord = Set.new
-    last = [0,0]
-    coord << last
-    chromosome.each_char do |c|
-      new = next_location(last,c)
-      if coord.include?(new)
-        return false
-      else
-        coord << new
-        last = new
-      end
+  def valid?(chromosome, coord = [0, 0])
+    if chromosome.empty?
+      return true
     end
-    return true
+
+    new_coord = next_location(coord.last, chromosome[0])
+    if coord.include?(new_coord)
+      return false
+    end
+
+    valid?(chromosome[1..-1], coord + [new_coord])
   end
 
   # @param chromosome string
