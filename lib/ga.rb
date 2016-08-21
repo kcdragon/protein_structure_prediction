@@ -9,8 +9,8 @@ require 'set'
 class GA
 
   # hp is string, pop is list, maxgen is int, mutation is double, crossover is double, ctype is double
-  def initialize(hp,pop,maxgen,mrate,crate,irate,ctype)
-    @hp,@pop,@maxgen,@mrate,@crate,@irate,@ctype = hp,pop,maxgen,mrate,crate,irate,ctype
+  def initialize(hp, pop, maxgen: 50, mrate: 0.1, crate: 0.6, irate: 0, ctype: 1)
+    @hp, @pop, @maxgen, @mrate, @crate, @irate, @ctype = hp, pop, maxgen, mrate, crate, irate, ctype
 
     odd = 0
     even = 0
@@ -443,9 +443,6 @@ class SteadyStateGA < GA
 end
 
 class StandardGA < GA
-  def initialize(hp, pop, maxgen, mutation, crossover, inversion, ctype)
-    super
-  end
 
   def run
     generation_count = 1
